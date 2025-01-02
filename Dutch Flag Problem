@@ -13,16 +13,10 @@ void sort(int n, vector<int>& v){
     while(mid<=hi){
         if(v[mid]==2){
             swap(mid,hi,v);
-            // int temp=v[mid];
-            // v[mid]=v[hi];
-            // v[hi]=temp;
             hi--;
         }
         else if(v[mid]==0){
             swap(mid,lo,v);
-            // int temp=v[mid];
-            // v[mid]=v[lo];
-            // v[lo]=temp;
             mid++;
             lo++;
         }
