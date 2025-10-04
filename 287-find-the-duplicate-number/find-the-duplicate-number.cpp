@@ -1,13 +1,22 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        unordered_set<int> seen;
-        for(int num : nums) {
-            if(seen.count(num)) {
-                return num;  // duplicate found
-            }
-            seen.insert(num);
+        int slow = nums[0];
+        int fast = nums[0];
+        
+        // Phase 1: Detect cycle
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+        
+        // Phase 2: Find entry point of cycle (duplicate number)
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
         }
-        return -1; // should never reach here if problem guarantees a duplicate
+        
+        return slow;
     }
 };
