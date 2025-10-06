@@ -1,38 +1,28 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
-        int n = s.size();
-        if (n == 0) return "";
+        if (s.empty()) return "";
         
-        vector<vector<bool>> dp(n, vector<bool>(n, false));
-        int start = 0;
-        int maxLength = 1;
-        
-        // Substrings of length 1
-        for (int i = 0; i < n; i++)
-            dp[i][i] = true;
-        
-        // Substrings of length 2
-        for (int i = 0; i < n-1; i++) {
-            if (s[i] == s[i+1]) {
-                dp[i][i+1] = true;
-                start = i;
-                maxLength = 2;
+        int start = 0, end = 0;
+        for (int i = 0; i < s.size(); i++) {
+            int len1 = expandAroundCenter(s, i, i);   // odd-length
+            int len2 = expandAroundCenter(s, i, i+1); // even-length
+            int len = max(len1, len2);
+            
+            if (len > end - start + 1) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
             }
         }
-        
-        // Substrings of length >= 3
-        for (int len = 3; len <= n; len++) {
-            for (int i = 0; i <= n - len; i++) {
-                int j = i + len - 1;
-                if (s[i] == s[j] && dp[i+1][j-1]) {
-                    dp[i][j] = true;
-                    start = i;
-                    maxLength = len;
-                }
-            }
+        return s.substr(start, end - start + 1);
+    }
+
+private:
+    int expandAroundCenter(string &s, int left, int right) {
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            left--;
+            right++;
         }
-        
-        return s.substr(start, maxLength);
+        return right - left - 1; // length of palindrome
     }
 };
