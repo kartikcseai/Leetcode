@@ -17,7 +17,6 @@ public:
         return s.substr(start, end - start + 1);
     }
 
-private:
     int expandAroundCenter(string &s, int left, int right) {
         while (left >= 0 && right < s.size() && s[left] == s[right]) {
             left--;
