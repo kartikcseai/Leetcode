@@ -10,9 +10,9 @@ public:
             while(k>j){
                 int current_sum=nums[i]+nums[j]+nums[k];
                 if(abs(current_sum-target)<abs(closest-target)) closest=current_sum;
-
-                if(target>current_sum) ++j;
-                else if (current_sum>target) --k;
+                // adjustments
+                if(target>current_sum) j++;
+                else if (current_sum>target) k--;
                 else return current_sum;
             }
         }
