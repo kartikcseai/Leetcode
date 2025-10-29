@@ -14,6 +14,5 @@ public:
             else t.push_back(c);
         }
         return t;
-
     }
 };
