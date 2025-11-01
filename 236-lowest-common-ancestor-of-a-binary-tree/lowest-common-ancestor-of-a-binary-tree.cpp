@@ -15,11 +15,9 @@ public:
         return existsInTree(root->left, target) || existsInTree(root->right, target);
     }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-      if(p==root || q==root) return root;
-      else if(existsInTree(root->left, p) && existsInTree(root->right, q)) return root; // p left mein aur q right exist karta hai 
-      else if(existsInTree(root->right, p) && existsInTree(root->left, q)) return root; // p right mein hai aur q left mein hai 
-      else if(existsInTree(root->left, p) && existsInTree(root->left, q)) return lowestCommonAncestor(root->left, p, q); // p left mein hai but q right mein nahi hai toh q bhi right mein hi hoga -> recursion call
-      else return lowestCommonAncestor(root->right, p, q);
+      if(existsInTree(root->left, p) && existsInTree(root->left, q)) return lowestCommonAncestor(root->left, p, q);
+      else if (existsInTree(root->right, p) && existsInTree(root->right, q)) return lowestCommonAncestor(root->right, p, q);
+      return root;
 
     }
 };
