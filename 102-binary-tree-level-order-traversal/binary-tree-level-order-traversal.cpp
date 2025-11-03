@@ -26,11 +26,10 @@ public:
     }
     void levelOrder(TreeNode* root, vector<vector<int>>& ans){
         int n=levels(root);
-        vector<int> ans_array;
         for(int i=1;i<=n;i++){
+            vector<int> ans_array;
             nthLevel(root, 1, i, ans_array);
             ans.push_back(ans_array);
-            ans_array.clear();
         }
     }
     vector<vector<int>> levelOrder(TreeNode* root) {
