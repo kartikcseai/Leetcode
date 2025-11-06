@@ -11,13 +11,18 @@
  */
 class Solution {
 public:
-    bool helper(TreeNode* root, TreeNode* mi, TreeNode* mx){
-        if(root==NULL) return true;
-        if(mi!=NULL && root->val<=mi->val) return false;
-        if(mx!=NULL && root->val>=mx->val) return false;
-        return helper(root->left, mi, root) && helper(root->right, root, mx);
+    long long maxTree(TreeNode* root){
+        if(root==NULL) return LLONG_MIN;
+        return max((long long)(root->val), max(maxTree(root->left), maxTree(root->right))); 
+    }
+    long long minTree(TreeNode* root){
+        if(root==NULL) return LLONG_MAX;
+        return min((long long)(root->val),min(minTree(root->left), minTree(root->right)));
     }
     bool isValidBST(TreeNode* root) {
-        return helper(root, NULL, NULL);
+        if(root==NULL) return true;
+        else if(root->val <= maxTree(root->left)) return false;
+        else if(root->val >= minTree(root->right)) return false;
+        return isValidBST(root->left) && isValidBST(root->right);
     }
 };
