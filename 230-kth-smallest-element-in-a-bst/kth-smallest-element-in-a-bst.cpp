@@ -1,16 +1,19 @@
-
 class Solution {
 public:
-    void inorderTraversal(TreeNode* root, vector<int>& ans){
+    void inorderTraversal(TreeNode* root, int &result, int &k){
         if(root==NULL) return;
-        inorderTraversal(root->left, ans);
-        ans.push_back(root->val);
-        inorderTraversal(root->right, ans);
+        inorderTraversal(root->left, result, k);
+        k--;
+        if(k==0){
+            result=root->val;
+            return;
+        }
+        inorderTraversal(root->right, result, k);
     }
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> ans;
-        inorderTraversal(root, ans);
-        return ans[k-1];
+        int result=-1;
+        inorderTraversal(root, result, k);
+        return result;
 
     }
 };
