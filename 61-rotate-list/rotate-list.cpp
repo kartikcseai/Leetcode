@@ -11,42 +11,24 @@
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        vector<int> arr;
+        if(head==NULL || head->next==NULL) return head;
+        int n=0; //n is the length of list.
         ListNode* temp=head;
+        ListNode* tail=NULL;
         while(temp!=NULL){
-            arr.push_back(temp->val);
+            if(temp->next==NULL) tail=temp;
+            temp=temp->next;
+            n++;
+        }
+        k=k%n;
+        if(k==0) return head;
+        temp=head;
+        for(int i=1;i<n-k;i++){
             temp=temp->next;
         }
-
-        int n = arr.size();
-        if (n == 0) return NULL;
-        k = k % n;
-        int i, j;
-
-        // reverse last k elements
-        for (i = n - k, j = n - 1; i < j; i++, j--){
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
-        // reverse first n - k elements
-        for (i = 0, j = n - k - 1; i < j; i++, j--){
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
-        // reverse the entire array
-        for (i = 0, j = n - 1; i < j; i++, j--){
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
-        ListNode* dummy=new ListNode(arr[0]);
-        ListNode* curr=dummy;
-        for(int x=0 ; x<arr.size() ; x++){
-            curr->next=new ListNode(arr[x]);
-            curr=curr->next;
-        }
-        return dummy->next;
+        tail->next=head;
+        head=temp->next;
+        temp->next=NULL;
+        return head;
     }
 };
