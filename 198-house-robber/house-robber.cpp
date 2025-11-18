@@ -1,18 +1,15 @@
 class Solution {
 public:
+    vector<int> dp;
+    int profit(vector<int>& arr, int i){
+        if(i==arr.size()-1) return arr[i]; // single house
+        if(i==arr.size()-2) return max(arr[i], arr[i+1]); // 2 houses
+        if(dp[i]!=-1) return dp[i];
+        return dp[i]=max(arr[i]+profit(arr, i+2), profit(arr, i+1));
+    }
     int rob(vector<int>& nums) {
-        int n = nums.size();
-        if(n == 0) return 0;
-        if(n == 1) return nums[0];
-        
-        int prev2 = nums[0];
-        int prev1 = max(nums[0], nums[1]);
-        
-        for(int i = 2; i < n; i++) {
-            int curr = max(prev1, nums[i] + prev2);
-            prev2 = prev1;
-            prev1 = curr;
-        }
-        return prev1;
+        dp.clear();
+        dp.resize(105,-1); // constraints mein limit se zadya ka size declare kar do -> CP 
+        return profit(nums, 0);
     }
 };
