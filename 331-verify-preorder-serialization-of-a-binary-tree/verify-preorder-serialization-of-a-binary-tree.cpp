@@ -8,7 +8,7 @@ public:
             if(slot<0) return false;
             if(preorder[i]!='#'){
                 slot+=2;
-                i++;
+                while (i<n&&preorder[i]!=',') i++;
             }
         }
         return slot==0;
