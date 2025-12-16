@@ -1,51 +1,40 @@
 class Solution {
 public:
     vector<vector<int>> adj;
-    pair<vector<int>,vector<int>> dp[161]; 
-    bool solved[161]; 
-    vector<int> merge(vector<int> &a ,vector<int> &b){
-        int bud = a.size(); 
-        vector<int> res(bud,0);
-        for (int i=0;i<bud;i++) {
-            for (int j=0;i+j<bud;j++) {
-                res[i+j]=max(res[i+j], a[i]+b[j]);
-            }
+    pair<vector<int>, vector<int>> dp[161];
+    bool solved[161];
+    vector<int> merge(vector<int>& a, vector<int>& b) {
+        int bud = a.size();
+        vector<int> res(bud, -1e9);
+        for (int i = 0; i < bud; i++) {
+            if (a[i] < 0) continue;
+            for (int j = 0; i + j < bud; j++) res[i + j] = max(res[i + j], a[i] + b[j]);
         }
-        return res; 
+        return res;
     }
-    pair<vector<int>,vector<int>> solve(int node,vector<int> &present, vector<int> &future, int b) {
-        if (solved[node]) return dp[node]; 
-        solved[node]=true;
-        vector<int> pt(b+1, 0);
-        vector<int> pnt(b+1, 0);
-        for (int c:adj[node]) {
-            auto cres=solve(c,  present,future, b) ;
-            pt=merge(pt, cres.first); 
-            pnt=merge(pnt,cres.second);
+    pair<vector<int>, vector<int>> solve(int node, vector<int>& present, vector<int>& future, int b){
+        if (solved[node]) return dp[node];
+        solved[node] = true;
+        vector<int> dp0(b + 1, 0); 
+        vector<int> dp1(b + 1, 0);
+        for (int c : adj[node]) {
+            auto [c0, c1] = solve(c, present, future, b);
+            dp0 = merge(dp0, c0);
+            dp1 = merge(dp1, c1);
         }
-        vector<int> res1(b+1, 0); 
-        int cost1 = present[node]/2; 
-        int cost2 = present[node]; 
-        for (int i=0;i<=b;i++) {
-            res1[i]=pnt[i];
-            if (i>=cost1) res1[i]=max(res1[i], pt[i - cost1] + (future[node] - cost1)); 
-        }
-        vector<int> res2(b+1, 0); 
-        for (int i=0;i<=b;i++) {
-            res2[i]=pnt[i];
-            if (i>=cost2) {
-                res2[i]=max(res2[i], pt[i-cost2]+(future[node]-cost2)); 
-        }
+        vector<int> res0 = dp0;
+        vector<int> res1 = dp0;
+        int full = present[node], half = present[node] / 2;
+        int profitFull = future[node] - full, profitHalf = future[node] - half;
+        for (int i = full; i <= b; i++) res0[i] = max(res0[i], dp1[i - full] + profitFull);
+        for (int i = half; i <= b; i++) res1[i] = max(res1[i], dp1[i - half] + profitHalf);
+        return dp[node] = {res0, res1};
     }
-        return {res1,res2} ;
-}
-public:
-    int maxProfit(int n, vector<int>& present, vector<int>& future, vector<vector<int>>& hierarchy, int budget) {
-        adj.resize(n);
-        for (auto e : hierarchy ) {
-            adj[--e[0]].push_back(--e[1]); 
-        }
-        auto res = solve(0,present, future, budget);  
-        return (res.second)[budget]; 
+    int maxProfit(int n, vector<int>& present, vector<int>& future, vector<vector<int>>& hierarchy,int budget){
+        adj.assign(n, {});
+        memset(solved, false, sizeof(solved));
+        for (auto& e : hierarchy) adj[e[0] - 1].push_back(e[1] - 1);
+        auto res = solve(0, present, future, budget);
+        return *max_element(res.first.begin(), res.first.end());
     }
 };
