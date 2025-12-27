@@ -8,9 +8,8 @@ public:
                 if (st.top() < -a) {
                     st.pop();
                     continue;
-                } else if (st.top() == -a) {
-                    st.pop();
-                }
+                } 
+                else if (st.top() == -a) st.pop();
                 destroyed = true;
                 break;
             }
