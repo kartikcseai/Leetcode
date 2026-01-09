@@ -1,14 +1,14 @@
 class Solution {
 public:
     int partitionString(string s) {
-        unordered_set<int> seen;
+        vector<bool> seen(26,false);
         int count=1;
         for(char c:s){
-            if(seen.count(c)){
+            if(seen[c-'a']){
                 count++;
-                seen.clear();
+                fill(seen.begin(),seen.end(),false);
             }
-            seen.insert(c);
+            seen[c-'a']=true;
         }
         return count;
     }
