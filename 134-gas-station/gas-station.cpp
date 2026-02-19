@@ -1,22 +1,17 @@
 class Solution {
 public:
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
-        int totalGas = 0, totalCost = 0;
+        int total_gas = 0, total_cost = 0;
         int start = 0, tank = 0;
-
-        for (int i = 0; i < gas.size(); i++) {
-            totalGas += gas[i];
-            totalCost += cost[i];
+        for(int i = 0; i < gas.size(); i++){
+            total_gas += gas[i];
+            total_cost += cost[i];
             tank += gas[i] - cost[i];
-
-            // If tank is negative, can't start from here or before
-            if (tank < 0) {
-                start = i + 1;  // try next station
-                tank = 0;       // reset tank
+            if(tank < 0){
+                start = i + 1;
+                tank = 0;
             }
         }
-
-        // If overall gas is less than cost, not possible
-        return (totalGas < totalCost) ? -1 : start;
+        return (total_gas < total_cost) ? -1 : start;
     }
 };
