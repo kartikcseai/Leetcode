@@ -1,26 +1,15 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
-    void helper(TreeNode* root){
-        if(root==NULL) return;
+    void helper_invertTree(TreeNode* root){
+        if(root == NULL) return;
         TreeNode* temp = root->left;
         root->left = root->right;
         root->right = temp;
-        helper(root->left);
-        helper(root->right);
+        helper_invertTree(root->left);
+        helper_invertTree(root->right);
     }
     TreeNode* invertTree(TreeNode* root) {
-        helper(root);
+        helper_invertTree(root);
         return root;
     }
 };
