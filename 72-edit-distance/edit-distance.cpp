@@ -1,17 +1,22 @@
 class Solution {
 public:
-    int minDistance(string word1, string word2) {
-        const int m=word1.length();
-        const int n=word2.length();
-        vector<vector<int>> dp(m+1,vector<int>(n+1));
-        for(int i=1;i<=m;i++) dp[i][0]=i;
-        for(int j=1;j<=n;j++) dp[0][j]=j;
-        for(int i=1;i<=m;i++){
-            for(int j=1;j<=n;j++){
-                if(word1[i-1]==word2[j-1]) dp[i][j]=dp[i-1][j-1];
-                else dp[i][j]=min({dp[i-1][j-1],dp[i-1][j],dp[i][j-1]})+1;
-            }
+    int t[501][501];
+    int helper_minDistance(string& s1, string& s2, int i, int j){
+        int n = s1.length(), m = s2.length();
+        if(i == n) return m - j; // insertion
+        if(j == m) return n - i; // deletion
+        if(t[i][j] != -1) return t[i][j];
+        if(s1[i] == s2[j]) return t[i][j] = helper_minDistance(s1, s2, i + 1, j + 1);
+        else {
+            int insertC = helper_minDistance(s1, s2, i, j + 1);
+            int deleteC = helper_minDistance(s1, s2, i + 1, j);
+            int replaceC = helper_minDistance(s1, s2, i + 1, j + 1);
+            return t[i][j] = 1 + min({insertC, deleteC, replaceC});
         }
-        return dp[m][n];
+        return -1;
+    }
+    int minDistance(string s1, string s2) {
+        memset(t, -1, sizeof(t));
+        return helper_minDistance(s1, s2, 0, 0);
     }
 };
